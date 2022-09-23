@@ -17,13 +17,15 @@ public class Task4 {
         );
 
         header(localization);
-        for (var isRunning = true; isRunning;) {
-            var optionalAbc = readABC(localization);
-            if (optionalAbc.isPresent()) {
-                writeEquationResult(localization, optionalAbc.get());
-            } else {
-                farewell(localization);
-                isRunning = false;
+        try (var scanner = new Scanner(System.in)) {
+            for (var isRunning = true; isRunning; ) {
+                var optionalAbc = readABC(localization, scanner);
+                if (optionalAbc.isPresent()) {
+                    writeEquationResult(localization, optionalAbc.get());
+                } else {
+                    farewell(localization);
+                    isRunning = false;
+                }
             }
         }
     }
@@ -43,10 +45,10 @@ public class Task4 {
         System.out.println(localization.goNextPresentation);
     }
 
-    private static Optional<ABC> readABC(Localization localization) {
+    private static Optional<ABC> readABC(Localization localization, Scanner scanner) {
         System.out.println(localization.inputHeaderInfo);
         System.out.println(localization.inputHeaderExitInfo);
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
             return Optional.of(new ABC(
                     Integer.parseInt(scanner.nextLine()),
                     Integer.parseInt(scanner.nextLine()),
